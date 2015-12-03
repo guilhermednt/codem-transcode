@@ -104,7 +104,8 @@ codem-transcode supports multiple database backends, courtesy of Sequelize. The 
             "dialect": "mysql",
             "username": "root",        
             "database": "codem",
-            "host": "localhost"
+            "host": "localhost",
+            "port": 3306
         },
         "slots":           8,
         "interface":       "127.0.0.1",
@@ -114,7 +115,7 @@ codem-transcode supports multiple database backends, courtesy of Sequelize. The 
         "ffprobe":         null
     }
 
-Be sure to specify a `dialect` ("mysql", "postgres", "sqlite"), a `username`, a `password` (can be omitted if using a passwordless database) and a `host` (can be omitted for "localhost").
+Be sure to specify a `dialect` ("mysql", "postgres", "sqlite"), a `username`, a `password` (can be omitted if using a passwordless database) and a `host` (can be omitted for "localhost"). `port` can be omitted for the default port.
 
 ## Usage
 
@@ -165,8 +166,10 @@ The `thumbnail_options` object is optional and contains a set of thumbnails that
 
 If you specify thumbnails but an error occurs during generation, your job will be marked as failed. If you don't specify a valid `seconds` or `percentages` option thumbnail generation will be skipped but the job can still be completed successfully.
 
+### Segmenting / HLS
+
 The `segments_options` object is optional and contains segment time (duration) in seconds. Segmented videos are used in [HLS](https://en.wikipedia.org/wiki/HTTP_Live_Streaming). These options are applied to the encoded video, thus `encoder_options` are required. Moreover `encoder_options` should prepare video for segmenting, because bitstream
-filter [h264_mp4toannexb](https://www.ffmpeg.org/ffmpeg-bitstream-filters.html#h264_005fmp4toannexb) will be applied to the video. Therefore it is recommended to transcode to an MP4 file before segmenting.
+filter [h264_mp4toannexb](https://www.ffmpeg.org/ffmpeg-bitstream-filters.html#h264_005fmp4toannexb) will be applied to the video. Therefore it is recommended to transcode to an MP4 file before segmenting. Segmenting works by taking the output file from your transcoder job and applying segmenting to it.
 
 The segmenting command looks like:
 
